@@ -1149,4 +1149,325 @@ boxplot(mydata$YearsWithCurrManager,col = "red")$out
 boxplot(mydata$YearsWithCurrManager,col = "red")$stats
 
 
-#----BIVARIATE ANALYSIS
+#----------------------BIVARIATE ANALYSIS----------------------#
+
+#------C-->Q
+#SUMMARIZATION 
+#VISUALIZATION
+
+#---JobInvolvement->Age
+boxplot(mydata$Age~mydata$JobInvolvement,
+        col=c(2,4))$stats
+#anova F test
+summary(aov(mydata$JobInvolvement~mydata$Age))
+
+#---JobLevel->Age
+boxplot(mydata$Age~mydata$JobLevel,
+        col=c(2,4))$stats
+
+#---JobRole->Age
+boxplot(mydata$Age~mydata$JobRole,
+        col=c(2,4))$stats
+
+####--------DistanceFromHome
+boxplot(mydata$DistanceFromHome~mydata$Attrition,col=c(2,4))
+#anova F test
+summary(aov(mydata$DistanceFromHome~mydata$Attrition))
+#t<-table(mydata$DistanceFromHome,mydata$Attrition)
+#barplot(t,col = c(2,4),beside = TRUE)
+####--------MonthlyIncome
+boxplot(mydata$MonthlyIncome~mydata$Attrition,col=c(2,4))$stats
+#anova F test
+summary(aov(mydata$MonthlyIncome~mydata$Attrition))
+
+##-----MonthlyRate
+boxplot(mydata$MonthlyRate~mydata$Attrition,col=c(2,4))$stats
+#anova F test
+summary(aov(mydata$MonthlyRate~mydata$Attrition))
+
+####-------TotalWorkingYears
+boxplot(mydata$TotalWorkingYears~mydata$Attrition,col=c(2,4))$stats
+#anova F test
+summary(aov(mydata$TotalWorkingYears~mydata$Attrition))
+
+####-------YearsAtCompany
+boxplot(mydata$YearsAtCompany~mydata$Attrition,col=c(2,4))$stats
+#anova F test
+summary(aov(mydata$YearsAtCompany~mydata$Attrition))
+
+####-------YearsInCurrentRole
+boxplot(mydata$YearsInCurrentRole~mydata$Attrition,col=c(2,4))$stats
+#anova F test
+summary(aov(mydata$YearsInCurrentRole~mydata$Attrition))
+
+####--------YearsWithCurrManager
+boxplot(mydata$YearsWithCurrManager~mydata$Attrition,col=c(2,4))$stats
+#anova F test
+summary(aov(mydata$YearsWithCurrManager~mydata$Attrition))
+
+
+
+#C-->C
+#SUMMARIZATION 
+#Comparative Proportion
+library(vcd)
+
+####-------Attrition rate with BusinessTravel
+mytable<-xtabs(~BusinessTravel + Attrition ,data=mydata)
+prop.table(mytable,1)
+#VISUALIZATION
+#Contingency Table
+chi.tab1<-table(mydata$BusinessTravel,mydata$Attrition)
+#TOH
+#Chi-Square Test
+chi.test1<-chisq.test(chi.tab1)
+chi.test1
+chi.test1$observed
+chi.test1$expected
+chi.test1$residuals
+sum((chi.test1$residuals)^2)
+mosaic(mytable,shade = TRUE, main = "mydata")
+?mosaic
+library(ggplot2)
+
+# grouped bar plot
+
+ggplot(mydata,aes(Attrition, 
+       BusinessTravel)) + 
+    geom_bar(position = "stack")
+
+####--------Department wise Attrition Rate
+mytable<-xtabs(~Department + Attrition ,data=mydata)
+prop.table(mytable,1)
+chi.tab1<-table(mydata$Department,mydata$Attrition)
+#TOH
+#Chi-Square Test
+chi.test1<-chisq.test(chi.tab1)
+chi.test1
+mosaic(mytable,shade = TRUE, main = "mydata")
+
+##------Educationwise Attrition Rate
+mytable<-xtabs(~Education + Attrition ,data=mydata)
+prop.table(mytable,1)
+chi.tab1<-table(mydata$Education,mydata$Attrition)
+#TOH
+#Chi-Square Test
+chi.test1<-chisq.test(chi.tab1)
+chi.test1
+mosaic(mytable,shade = TRUE, main = "mydata")
+
+####----------EducationFieldwise Attrition Rate
+mytable<-xtabs(~EducationField + Attrition ,data=mydata)
+prop.table(mytable,1)
+chi.tab1<-table(mydata$EducationField,mydata$Attrition)
+#TOH
+#Chi-Square Test
+chi.test1<-chisq.test(chi.tab1)
+chi.test1
+mosaic(mytable,shade = TRUE, main = "mydata")
+
+####----------Effect of EnvironmentSatisfaction on Attrition
+mytable<-xtabs(~EnvironmentSatisfaction + Attrition ,data=mydata)
+prop.table(mytable,1)
+chi.tab1<-table(mydata$EnvironmentSatisfaction,mydata$Attrition)
+#TOH
+#Chi-Square Test
+chi.test1<-chisq.test(chi.tab1)
+chi.test1
+mosaic(mytable,shade = TRUE, main = "mydata")
+
+##---Attrition Rate with Gender
+mytable<-xtabs(~Gender + Attrition ,data=mydata)
+prop.table(mytable,1)
+chi.tab1<-table(mydata$Gender,mydata$Attrition)
+#TOH
+#Chi-Square Test
+chi.test1<-chisq.test(chi.tab1)
+chi.test1
+mosaic(mytable,shade = TRUE, main = "mydata")
+
+####--------Attrition Rate with JobInvolvement
+mytable<-xtabs(~JobInvolvement + Attrition ,data=mydata)
+prop.table(mytable,1)
+chi.tab1<-table(mydata$JobInvolvement,mydata$Attrition)
+#TOH
+#Chi-Square Test
+chi.test1<-chisq.test(chi.tab1)
+chi.test1
+mosaic(mytable,shade = TRUE, main = "mydata")
+
+####--------Effect of JobLevel on Attrition rate
+mytable<-xtabs(~JobLevel + Attrition ,data=mydata)
+prop.table(mytable,1)
+chi.tab1<-table(mydata$JobLevel,mydata$Attrition)
+#TOH
+#Chi-Square Test
+chi.test1<-chisq.test(chi.tab1)
+chi.test1
+mosaic(mytable,shade = TRUE, main = "mydata")
+
+####--------Effect of JobRole on Attrition rate
+mytable<-xtabs(~JobRole + Attrition ,data=mydata)
+prop.table(mytable,1)
+chi.tab1<-table(mydata$JobRole,mydata$Attrition)
+#TOH
+#Chi-Square Test
+chi.test1<-chisq.test(chi.tab1)
+chi.test1
+mosaic(mytable,shade = TRUE, main = "mydata")
+
+####--------Effect of JobSatisfaction on Attrition rate
+mytable<-xtabs(~JobSatisfaction + Attrition ,data=mydata)
+prop.table(mytable,1)
+chi.tab1<-table(mydata$JobSatisfaction,mydata$Attrition)
+#TOH
+#Chi-Square Test
+chi.test1<-chisq.test(chi.tab1)
+chi.test1
+mosaic(mytable,shade = TRUE, main = "mydata")
+
+####---------Effect of MaritalStatus on Attrition rate
+mytable<-xtabs(~MaritalStatus + Attrition ,data=mydata)
+prop.table(mytable,1)
+mosaic(mytable,shade = TRUE, main = "mydata")
+
+####---------Effect of OverTime on Attrition rate
+mytable<-xtabs(~OverTime + Attrition ,data=mydata)
+prop.table(mytable,1)
+mosaic(mytable,shade = TRUE, main = "mydata")
+
+##--Effect of PerformanceRating on Attrition rate
+mytable<-xtabs(~PerformanceRating + Attrition ,data=mydata)
+prop.table(mytable,1)
+mosaic(mytable,shade = TRUE, main = "mydata")
+
+####---------Effect of RelationSatisfaction on Attrition rate
+mytable<-xtabs(~RelationshipSatisfaction + Attrition ,data=mydata)
+prop.table(mytable,1)
+mosaic(mytable,shade = TRUE, main = "mydata")
+
+####---------Effect of WorkLifeBalance on Attrition rate
+mytable<-xtabs(~WorkLifeBalance + Attrition ,data=mydata)
+prop.table(mytable,1)
+mosaic(mytable,shade = TRUE, main = "mydata")
+
+
+
+#########---------------------------MODEL BUILDING---------------------------#########
+
+set.seed(1)
+a<-11:20
+a
+a.train<- sample(length(a),0.6*length(a) )
+a.train
+a[a.train]
+a[-a.train]
+
+nrow(mydata)
+train<-sample(1:nrow(mydata),0.7*nrow(mydata))
+train
+test<-(-train)
+test
+
+mydatalm1<-lm(Attrition~DistanceFromHome,data=mydata)
+summary(mydatalm1)
+coef(mydatalm1)
+
+#boxplot(mydata$Attrition,mydata$DistanceFromHome)
+#abline(mydatalm1)
+
+
+TSS<- sum((mydata$Attrition-mean(mydata$Attrition))^2)
+TSS
+#RSS(sum(y-yhat))
+RSS1<-sum((mydata$Attrition-mydatalm1$fitted.values)^2)
+RSS1
+RSS1<-sum((mydatalm1$residuals)^2)
+points(mydata$DistanceFromHome,mydatalm1$fitted.values,pch=3)
+#RSQ
+(TSS-RSS1)/TSS
+#Adj RSQ
+summary(mydatalm1)$adj.r.squared
+#RSE-Residual Standard Error
+summary(mydatalm1)$sigma
+#Summary
+summary(mydatalm1)
+#Homoscedastic(mean(residual)=0,var=constant,residual=normal)
+mean(mydatalm1$residuals)
+shapiro.test(mydatalm1$residuals)#HO:Normal,Ha:Not Normal
+#Plots
+#plot(mydatalm1,1)
+#plot(mydatalm1,3)
+#Prediction
+
+
+
+mydatalm2<-lm(Attrition~BusinessTravel+DistanceFromHome,data=mydata)
+summary(mydatalm2)
+coef(mydatalm2)
+
+#boxplot(mydata$Attrition,mydata$DistanceFromHome)
+#abline(mydatalm1)
+
+
+TSS<- sum((mydata$Attrition-mean(mydata$Attrition))^2)
+TSS
+#RSS(sum(y-yhat))
+RSS2<-sum((mydata$Attrition-mydatalm2$fitted.values)^2)
+RSS2
+RSS2<-sum((mydatalm2$residuals)^2)
+#RSQ
+(TSS-RSS2)/TSS
+#Adj RSQ
+summary(mydatalm2)$adj.r.squared
+#RSE-Residual Standard Error
+summary(mydatalm2)$sigma
+#Summary
+summary(mydatalm2)
+#Homoscedastic(mean(residual)=0,var=constant,residual=normal)
+mean(mydatalm2$residuals)
+
+
+
+mydatalm3<-lm(Attrition~BusinessTravel+DistanceFromHome+EnvironmentSatisfaction,data=mydata)
+summary(mydatalm3)
+coef(mydatalm3)
+
+TSS<- sum((mydata$Attrition-mean(mydata$Attrition))^2)
+TSS
+#RSS(sum(y-yhat))
+RSS1<-sum((mydata$Attrition-mydatalm1$fitted.values)^2)
+RSS1
+RSS1<-sum((mydatalm1$residuals)^2)
+points(mydata$DistanceFromHome,mydatalm1$fitted.values,pch=3)
+#RSQ
+(TSS-RSS1)/TSS
+#Adj RSQ
+summary(mydatalm1)$adj.r.squared
+#RSE-Residual Standard Error
+summary(mydatalm1)$sigma
+#Summary
+summary(mydatalm1)
+#Homoscedastic(mean(residual)=0,var=constant,residual=normal)
+mean(mydatalm1$residuals)
+
+
+
+mydatalm4<-lm(Attrition~BusinessTravel+DistanceFromHome+EnvironmentSatisfaction+JobInvolvement,data=mydata)
+summary(mydatalm4)
+
+
+mydatalm5<-lm(Attrition~BusinessTravel+DistanceFromHome+EnvironmentSatisfaction+JobInvolvement
+              +JobLevel,data=mydata)
+summary(mydatalm5)
+
+
+
+mydatalm6<-lm(Attrition~BusinessTravel+DistanceFromHome+EnvironmentSatisfaction+JobInvolvement
+              +JobLevel+JobSatisfaction,data=mydata)
+summary(mydatalm6)
+
+
+mydatalm7<-lm(Attrition~BusinessTravel+DistanceFromHome+EnvironmentSatisfaction+JobInvolvement
+              +JobLevel+JobSatisfaction+OverTime,data=mydata)
+summary(mydatalm7)
