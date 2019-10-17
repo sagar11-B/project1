@@ -1393,6 +1393,29 @@ print(accuracy)
 error<-1-accuracy
 print(error)
 
+####-----Logistic Regression Model2
+log.fit1=glm(Attrition~BusinessTravel+DistanceFromHome+Department+EducationField+
+                EnvironmentSatisfaction+Gender+JobInvolvement+JobLevel+JobSatisfaction
+                +MaritalStatus+OverTime+RelationshipSatisfaction+WorkLifeBalance
+                ,data=mydata[train,],family=binomial)#Generalized Linear Model
+summary(log.fit1)
+
+log.pred<-predict(log.fit1,newdata = mydata[test,],type="response")
+length(log.pred)
+
+log.pred1<-predict(log.fit1,newdata = mydata[train,],type="response")
+ROCRPred<-prediction(log.pred1,mydata$Attrition[train])
+ROCRPerf<-performance(ROCRPred,"tpr","fpr")
+
+plot(ROCRPerf,colorize=TRUE,print.cutoffs.at=seq(0.1,by=0.1))
+
+confmatrix<-table(ActualValue=mydata$Attrition[test],PredictedValue=log.pred >0.3)
+sum(diag(confmatrix))
+sum(confmatrix)
+accuracy<-sum(diag((confmatrix))/sum(confmatrix))
+print(accuracy)
+error<-1-accuracy
+print(error)
 
 
 
