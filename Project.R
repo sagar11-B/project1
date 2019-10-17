@@ -1369,7 +1369,38 @@ train
 test<-(-train)
 test
 
-mydatalm1<-lm(Attrition~DistanceFromHome,data=mydata)
+
+####-------------Logistic Regression-------------#####
+library(ROCR)
+
+log.fit=glm(Attrition~BusinessTravel+DistanceFromHome+EnvironmentSatisfaction+JobInvolvement
+            +JobLevel+JobSatisfaction+OverTime,data=mydata[train,],family=binomial)#Generalized Linear Model
+summary(log.fit)
+log.pred<-predict(log.fit,newdata = mydata[test,],type="response")
+length(log.pred)
+
+log.pred1<-predict(log.fit,newdata = mydata[train,],type="response")
+ROCRPred<-prediction(log.pred1,mydata$Attrition[train])
+ROCRPerf<-performance(ROCRPred,"tpr","fpr")
+
+plot(ROCRPerf,colorize=TRUE,print.cutoffs.at=seq(0.1,by=0.1))
+
+confmatrix<-table(ActualValue=mydata$Attrition[test],PredictedValue=log.pred >0.3)
+sum(diag(confmatrix))
+sum(confmatrix)
+accuracy<-sum(diag((confmatrix))/sum(confmatrix))
+print(accuracy)
+error<-1-accuracy
+print(error)
+
+
+
+
+
+
+####--------------------Linear Regression----------------####
+
+mydatalm1<-lm(MonthlyIncome~TotalWorkingYears+YearsAtCompany,data=mydata)
 summary(mydatalm1)
 coef(mydatalm1)
 
@@ -1402,72 +1433,5 @@ shapiro.test(mydatalm1$residuals)#HO:Normal,Ha:Not Normal
 
 
 
-mydatalm2<-lm(Attrition~BusinessTravel+DistanceFromHome,data=mydata)
-summary(mydatalm2)
-coef(mydatalm2)
-
-#boxplot(mydata$Attrition,mydata$DistanceFromHome)
-#abline(mydatalm1)
 
 
-TSS<- sum((mydata$Attrition-mean(mydata$Attrition))^2)
-TSS
-#RSS(sum(y-yhat))
-RSS2<-sum((mydata$Attrition-mydatalm2$fitted.values)^2)
-RSS2
-RSS2<-sum((mydatalm2$residuals)^2)
-#RSQ
-(TSS-RSS2)/TSS
-#Adj RSQ
-summary(mydatalm2)$adj.r.squared
-#RSE-Residual Standard Error
-summary(mydatalm2)$sigma
-#Summary
-summary(mydatalm2)
-#Homoscedastic(mean(residual)=0,var=constant,residual=normal)
-mean(mydatalm2$residuals)
-
-
-
-mydatalm3<-lm(Attrition~BusinessTravel+DistanceFromHome+EnvironmentSatisfaction,data=mydata)
-summary(mydatalm3)
-coef(mydatalm3)
-
-TSS<- sum((mydata$Attrition-mean(mydata$Attrition))^2)
-TSS
-#RSS(sum(y-yhat))
-RSS1<-sum((mydata$Attrition-mydatalm1$fitted.values)^2)
-RSS1
-RSS1<-sum((mydatalm1$residuals)^2)
-points(mydata$DistanceFromHome,mydatalm1$fitted.values,pch=3)
-#RSQ
-(TSS-RSS1)/TSS
-#Adj RSQ
-summary(mydatalm1)$adj.r.squared
-#RSE-Residual Standard Error
-summary(mydatalm1)$sigma
-#Summary
-summary(mydatalm1)
-#Homoscedastic(mean(residual)=0,var=constant,residual=normal)
-mean(mydatalm1$residuals)
-
-
-
-mydatalm4<-lm(Attrition~BusinessTravel+DistanceFromHome+EnvironmentSatisfaction+JobInvolvement,data=mydata)
-summary(mydatalm4)
-
-
-mydatalm5<-lm(Attrition~BusinessTravel+DistanceFromHome+EnvironmentSatisfaction+JobInvolvement
-              +JobLevel,data=mydata)
-summary(mydatalm5)
-
-
-
-mydatalm6<-lm(Attrition~BusinessTravel+DistanceFromHome+EnvironmentSatisfaction+JobInvolvement
-              +JobLevel+JobSatisfaction,data=mydata)
-summary(mydatalm6)
-
-
-mydatalm7<-lm(Attrition~BusinessTravel+DistanceFromHome+EnvironmentSatisfaction+JobInvolvement
-              +JobLevel+JobSatisfaction+OverTime,data=mydata)
-summary(mydatalm7)
